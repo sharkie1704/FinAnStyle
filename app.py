@@ -14,12 +14,42 @@ if 'expenses' not in st.session_state:
 if 'incomes' not in st.session_state:
     st.session_state.incomes = []
 
+# Set page configuration
+st.set_page_config(
+    page_title="Finance Tracker",
+    page_icon="💰",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+
+# Apply custom CSS for theming
+st.markdown("""
+    <style>
+    .css-18e3th9 {
+        background-color: #f5f5f5;
+        color: #333;
+        font-family: 'Arial', sans-serif;
+    }
+    .css-1d391kg {
+        background-color: #2e3b4e;
+        color: white;
+    }
+    .css-1d391kg a {
+        color: white;
+    }
+    .css-1d391kg a:hover {
+        color: #f39c12;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Define pages
 def login_page():
     st.title("Login Page")
     st.write("This is the login page.")
     st.title("Welcome to the Fine-An-Style App!")
     st.write("This is your next step towards a healthier financial life (hopefully).")
+    st.image("https://www.shutterstock.com/image-vector/bank-building-architecture-facade-government-600nw-2440534455.jpg", use_container_width=True)
 
 # Expenses page
 def expenses_page():
@@ -62,14 +92,12 @@ def expenses_page():
 
 # Income page
 def income_page():
-    st.title("Income Page")
-    st.write("This is the income page.") 
     st.title("Income Tracker")
     st.write("This is where you can track your incomes.")
     income_name = st.text_input("Income Name", "");
     income_amount = st.number_input("Income Amount", min_value=0.01, format="%.2f")
     income_category = st.selectbox("Income Category", ["Salary", "Scholarship/Bursary", "Loans", "Bonus", "Gift", "Other"])
-# Button to add an income to the list
+    # Button to add an income to the list
     if st.button("Add Income"):
         if income_name and income_amount > 0:
             st.session_state.incomes.append({
@@ -85,11 +113,9 @@ def income_page():
         df = pd.DataFrame(st.session_state.incomes)
         st.write("### Your Incomes:")
         st.dataframe(df)
-    
         # Calculate and display the total
         total_spent = df['Amount'].sum()
         st.write(f"### Total Gained: ${total_spent:.2f}")
-
         # Visualize incomes by category with a pie chart
         category_totals = df.groupby('Category')['Amount'].sum()
         fig, ax = plt.subplots()
@@ -100,8 +126,6 @@ def income_page():
     else:
         st.write("No expenses added yet.")
 
-
-
 # Menu page    
 def menu_page():
     st.title("Menu Page")
@@ -109,14 +133,14 @@ def menu_page():
 
 # Sidebar for navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Login", "Expenses", "Menu"])
+page = st.sidebar.radio("Go to", ["Login", "Expenses", "Incomes", "Menu"])
 
 # Display the selected page
 if page == "Login":
     login_page()
 elif page == "Expenses":
     expenses_page()
-elif page == "Income":
+elif page == "Incomes":
     income_page()
 elif page == "Menu":
     menu_page()
