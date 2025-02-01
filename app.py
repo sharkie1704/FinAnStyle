@@ -3,6 +3,12 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
+#LOGIN PAGE
+#EXPENSES UPDATE PAGE
+#MENU PAGE
+#PAGE FOR EACH MENU OPTION
+
+
 st.title("Hello World! This is our ConUHacks IV project.")
 st.write("This is a simple Streamlit Finance and Budgeting app.")
 st.text_area("Please enter your name:")
@@ -67,3 +73,4 @@ if st.session_state.expenses:
     st.pyplot(fig)
 else:
     st.write("No expenses added yet.")
+
