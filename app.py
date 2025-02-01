@@ -3,9 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-#LOGIN PAGE
-#EXPENSES UPDATE PAGE
-#MENU PAGE
+#LOGIN PAGE in progress 
+#EXPENSES UPDATE PAGE in progress
+#MENU PAGE in progress
 #PAGE FOR EACH MENU OPTION
 
 # Initialize session state
@@ -43,13 +43,19 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Define pages
+# Define pages:
+
+# Login page
 def login_page():
     st.title("Login Page")
     st.write("This is the login page.")
+    
+# Menu page    
+def menu_page():
     st.title("Welcome to the Fine-An-Style App!")
     st.write("This is your next step towards a healthier financial life (hopefully).")
     st.image("https://www.shutterstock.com/image-vector/bank-building-architecture-facade-government-600nw-2440534455.jpg", use_container_width=True)
+
 
 # Expenses page
 def expenses_page():
@@ -90,6 +96,10 @@ def expenses_page():
     else:
         st.write("No expenses added yet.")
 
+    weekly_budget = st.text_input("Weekly Budget", "")
+    if total_spent > weekly_budget:
+        st.write("You have exceeded your weekly budget. We recommend the following:")
+
 # Income page
 def income_page():
     st.title("Income Tracker")
@@ -126,14 +136,9 @@ def income_page():
     else:
         st.write("No expenses added yet.")
 
-# Menu page    
-def menu_page():
-    st.title("Menu Page")
-    st.write("This is the menu page.")
-
 # Sidebar for navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Login", "Expenses", "Incomes", "Menu"])
+page = st.sidebar.radio("Go to", ["Menu", "Login", "Expenses", "Incomes"])
 
 # Display the selected page
 if page == "Login":
