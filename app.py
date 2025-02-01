@@ -47,7 +47,11 @@ st.markdown("""
 
 # Login page
 def login_page():
+    st.title("Welcome to the Fine-An-Style App!")
+    st.write("This is your next step towards a healthier financial life (hopefully).")
+    #st.balloons()
     st.title("Login Page")
+<<<<<<< Updated upstream
     st.write("This is the login page.")
     
 # Menu page    
@@ -55,6 +59,13 @@ def menu_page():
     st.title("Welcome to the Fine-An-Style App!")
     st.write("This is your next step towards a healthier financial life (hopefully).")
     st.image("https://www.shutterstock.com/image-vector/bank-building-architecture-facade-government-600nw-2440534455.jpg", use_container_width=True)
+=======
+    st.write("Please enter your username and password")
+    st.text_input("Username")
+    st.text_input("Password")
+    st.write("Login Successful")
+
+>>>>>>> Stashed changes
 
 
 # Expenses page
