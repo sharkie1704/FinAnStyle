@@ -8,35 +8,18 @@ import matplotlib.pyplot as plt
 #MENU PAGE
 #PAGE FOR EACH MENU OPTION
 
-
 st.title("Hello World! This is our ConUHacks IV project.")
 st.write("This is a simple Streamlit Finance and Budgeting app.")
-st.text_area("Please enter your name:")
 st.balloons()
-st.button("Click me!", key="button1")
-
-if "attendance" not in st.session_state:
-    st.session_state.attendance = set()
-
-
-def take_attendance():
-    if st.session_state.name in st.session_state.attendance:
-        st.info(f"{st.session_state.name} has already been counted.")
-    else:
-        st.session_state.attendance.add(st.session_state.name)
-
-
-with st.form(key="my_form"):
-    st.text_input("Name", key="name")
-    st.form_submit_button("I'm ready to go!", on_click=take_attendance)
 
 # Initialize session state if it's not already initialized
 if 'expenses' not in st.session_state:
     st.session_state.expenses = []
 
-# Streamlit app layout
-st.title("Personal Finance Tracker")
 
+# Streamlit app layout for EXPENSES
+st.title("Expense Tracker")
+st.write("This is where you can track your expenses.")
 # Input fields for the user to enter expenses
 expense_name = st.text_input("Expense Name", "")
 expense_amount = st.number_input("Expense Amount", min_value=0.01, format="%.2f")
@@ -74,3 +57,17 @@ if st.session_state.expenses:
 else:
     st.write("No expenses added yet.")
 
+st.title("Income Tracker")
+st.write("This is where you can track your incomes.")
+income_name = st.text_input("Income Name", "");
+income_amount = st.number_input("Income Amount", min_value=0.01, format="%.2f")
+income_category = st.selectbox("Income Category", ["Salary", "Scholarship/Bursary", "Loans", "Bonus", "Gift", "Other"])
+
+# Button to add an income to the list
+if st.button("Add Income"):
+    if income_name and income_amount > 0:
+        st.session_state.incomes.append({
+            'Name': income_name,
+            'Amount': income_amount,
+            'Category': income_category
+        })
