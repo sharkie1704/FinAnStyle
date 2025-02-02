@@ -22,28 +22,10 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Apply custom CSS for theming
-st.markdown("""
-    <style>
-    .css-18e3th9 {
-        background-color: #f5f5f5;
-        color: #333;
-        font-family: 'Arial', sans-serif;
-    }
-    .css-1d391kg {
-        background-color: #2e3b4e;
-        color: white;
-    }
-    .css-1d391kg a {
-        color: white;
-    }
-    .css-1d391kg a:hover {
-        color: #f39c12;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 # Define pages:
+
+
+tab1, tab2 = st.tabs(["🏠 Dashboard", "💰 Transactions"])
 
 # Login page
 def login_page():
@@ -51,22 +33,16 @@ def login_page():
     st.write("This is your next step towards a healthier financial life (hopefully).")
     #st.balloons()
     st.title("Login Page")
-<<<<<<< Updated upstream
     st.write("This is the login page.")
     
 # Menu page    
 def menu_page():
     st.title("Welcome to the Fine-An-Style App!")
     st.write("This is your next step towards a healthier financial life (hopefully).")
-    st.image("https://www.shutterstock.com/image-vector/bank-building-architecture-facade-government-600nw-2440534455.jpg", use_container_width=True)
-=======
     st.write("Please enter your username and password")
     st.text_input("Username")
     st.text_input("Password")
     st.write("Login Successful")
-
->>>>>>> Stashed changes
-
 
 # Expenses page
 def expenses_page():
@@ -108,8 +84,8 @@ def expenses_page():
         st.write("No expenses added yet.")
 
     weekly_budget = st.text_input("Weekly Budget", "")
-    if total_spent > weekly_budget:
-        st.write("You have exceeded your weekly budget. We recommend the following:")
+    #if total_spent > weekly_budget:
+     #   st.write("You have exceeded your weekly budget. We recommend the following:")
 
 # Income page
 def income_page():
@@ -148,15 +124,42 @@ def income_page():
         st.write("No expenses added yet.")
 
 # Sidebar for navigation
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Menu", "Login", "Expenses", "Incomes"])
+#st.sidebar.title("Navigation")
+#page = st.sidebar.radio("Go to", ["Menu", "Login", "Expenses", "Incomes"])
 
 # Display the selected page
-if page == "Login":
+# if page == "Login":
+#     login_page()
+# elif page == "Expenses":
+#     expenses_page()
+# elif page == "Incomes":
+#     income_page()
+# elif page == "Menu":
+#     menu_page()
+
+with tab1:
+    st.write("Welcome to the Dashboard!")
     login_page()
-elif page == "Expenses":
-    expenses_page()
-elif page == "Incomes":
-    income_page()
-elif page == "Menu":
     menu_page()
+
+with tab2:
+    st.write("Welcome to the Transactions page!")
+    expenses_page()
+    income_page()
+    # Display the selected page
+    # if page == "Login":
+    #     login_page()
+    # elif page == "Expenses":
+    #     expenses_page()
+    # elif page == "Incomes":
+    #     income_page()
+    
+    css = """
+    <style>
+        .stTabs [data-baseweb="tab-list"] button [data-testid="stMarkdownContainer"] p {
+        font-size:1.2rem;
+        }
+    </style>
+    """
+
+    st.markdown(css, unsafe_allow_html=True)
