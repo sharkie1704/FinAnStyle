@@ -30,20 +30,20 @@ tab1, tab2, tab3 = st.tabs(["🏠 Main Menu", "💰 Budgeting", "💸 Savings Go
 
 # Main Menu Page
 def menu_page():
-    st.title("Welcome to the Fine-An-Style App!")
+    st.title("Welcome to FineAnStyle!")
     # st.image(logo_url, width=200)  # Display logo image
     
     st.write("""
         ### Take Control of Your Financial Future
-        This app is designed to help you track your expenses, income, and savings goals in a simple, user-friendly way.
+        This app is designed to help you track your expenses, incomes, and savings goals in a simple, user-friendly way.
         
-        **Why Choose Fine-An-Style?**
+        **Why Choose FineAnStyle?**
         - Easy-to-use budgeting tools.
         - Track your expenses and incomes in real-time.
         - Get insights with graphical data visualizations.
         - Personalized budget tracking based on your inputs.
         
-        Ready to kickstart your budgeting journey?
+        **Ready to kickstart your budgeting journey?**
     """)
     
     user_name = st.text_input("Your full name:")
@@ -65,7 +65,7 @@ def expenses_page():
     
     expense_name = st.text_input("Expense Name")
     expense_amount = st.number_input("Expense Amount", min_value=0.01, format="%.2f")
-    expense_category = st.selectbox("Expense Category", ["Food", "Transport", "Entertainment", "Bills", "Other"])
+    expense_category = st.selectbox("Expense Category", ["Food", "Transportation", "Entertainment", "Bills", "Other"])
     
     if st.button("Add Expense"):
         if expense_name and expense_amount > 0:
@@ -165,4 +165,3 @@ else:
         income_page()
     with tab3:
         savings_page()
-
