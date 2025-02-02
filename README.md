@@ -1,5 +1,3 @@
-# ConUHacks-IX
-# By: Digital Defenders
 # Finance Tracker - FineAnStyle
 
 Welcome to **FineAnStyle**, a simple and interactive finance tracker built using Streamlit! This app is designed to help you manage your expenses, incomes, and savings goals in a streamlined way, making it easier to track your financial progress.
