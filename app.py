@@ -8,6 +8,33 @@ import matplotlib.pyplot as plt
 #MENU PAGE in progress
 #PAGE FOR EACH MENU OPTION
 
+import streamlit as st
+
+# Table of contents with links
+st.markdown("""
+    <div style="position:fixed; top:10px; right:10px; width:200px;">
+        <h3>Table of Contents</h3>
+        <ul>
+            <li><a href="#section1">Section 1</a></li>
+            <li><a href="#section2">Section 2</a></li>
+            <li><a href="#section3">Section 3</a></li>
+        </ul>
+    </div>
+""", unsafe_allow_html=True)
+
+# Content Sections
+st.markdown('<a id="section1"></a>', unsafe_allow_html=True)
+st.header('Section 1')
+st.write('This is the content for section 1.')
+
+st.markdown('<a id="section2"></a>', unsafe_allow_html=True)
+st.header('Section 2')
+st.write('This is the content for section 2.')
+
+st.markdown('<a id="section3"></a>', unsafe_allow_html=True)
+st.header('Section 3')
+st.write('This is the content for section 3.')
+
 # Initialize session state
 if 'expenses' not in st.session_state:
         st.session_state.expenses = []
@@ -51,7 +78,6 @@ def login_page():
     st.write("This is your next step towards a healthier financial life (hopefully).")
     #st.balloons()
     st.title("Login Page")
-<<<<<<< Updated upstream
     st.write("This is the login page.")
     
 # Menu page    
@@ -59,13 +85,6 @@ def menu_page():
     st.title("Welcome to the Fine-An-Style App!")
     st.write("This is your next step towards a healthier financial life (hopefully).")
     st.image("https://www.shutterstock.com/image-vector/bank-building-architecture-facade-government-600nw-2440534455.jpg", use_container_width=True)
-=======
-    st.write("Please enter your username and password")
-    st.text_input("Username")
-    st.text_input("Password")
-    st.write("Login Successful")
-
->>>>>>> Stashed changes
 
 
 # Expenses page
