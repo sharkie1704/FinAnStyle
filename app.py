@@ -10,9 +10,11 @@ import matplotlib.pyplot as plt
 
 # Initialize session state
 if 'expenses' not in st.session_state:
-        st.session_state.expenses = []
+    st.session_state.expenses = []
 if 'incomes' not in st.session_state:
     st.session_state.incomes = []
+if 'active_tab' not in st.session_state:
+    st.session_state.active_tab = "Main Menu"
 
 # Set page configuration
 st.set_page_config(
@@ -25,24 +27,17 @@ st.set_page_config(
 # Define pages:
 
 
-tab1, tab2 = st.tabs(["🏠 Dashboard", "💰 Transactions"])
+tab1, tab2 = st.tabs(["🏠 Main Menu", "💰 Budgeting"])
 
-# Login page
-def login_page():
-    st.title("Welcome to the Fine-An-Style App!")
-    st.write("This is your next step towards a healthier financial life (hopefully).")
-    #st.balloons()
-    st.title("Login Page")
-    st.write("This is the login page.")
-    
 # Menu page    
 def menu_page():
     st.title("Welcome to the Fine-An-Style App!")
     st.write("This is your next step towards a healthier financial life (hopefully).")
-    st.write("Please enter your username and password")
-    st.text_input("Username")
-    st.text_input("Password")
-    st.write("Login Successful")
+    user_name=st.text_input("Your full name:")
+    user_age=st.text_input("Your age:")
+    user_education_status=st.selectbox("Your education status:", ["High School", "College", "University", "Post-Graduate"])
+    if st.button("I'm ready to kickstart my budgeting journey!"):
+        st.session_state.active_tab = "Budgeting"
 
 # Expenses page
 def expenses_page():
@@ -83,10 +78,6 @@ def expenses_page():
     else:
         st.write("No expenses added yet.")
 
-    weekly_budget = st.text_input("Weekly Budget", "")
-    #if total_spent > weekly_budget:
-     #   st.write("You have exceeded your weekly budget. We recommend the following:")
-
 # Income page
 def income_page():
     st.title("Income Tracker")
@@ -123,43 +114,35 @@ def income_page():
     else:
         st.write("No expenses added yet.")
 
-# Sidebar for navigation
-#st.sidebar.title("Navigation")
-#page = st.sidebar.radio("Go to", ["Menu", "Login", "Expenses", "Incomes"])
+if st.session_state.active_tab == "Main Menu":
+    with tab1:
+        menu_page()
+    with tab2:
+        st.write("Please go to the Main Menu tab first!")
+else:
+    with tab1:
+        st.write("You can head over to the Budgeting tab!")
+    with tab2:
+        expenses_page()
+        income_page()
 
-# Display the selected page
-# if page == "Login":
-#     login_page()
-# elif page == "Expenses":
-#     expenses_page()
-# elif page == "Incomes":
-#     income_page()
-# elif page == "Menu":
-#     menu_page()
-
-with tab1:
-    st.write("Welcome to the Dashboard!")
-    login_page()
-    menu_page()
-
-with tab2:
-    st.write("Welcome to the Transactions page!")
-    expenses_page()
-    income_page()
-    # Display the selected page
-    # if page == "Login":
-    #     login_page()
-    # elif page == "Expenses":
-    #     expenses_page()
-    # elif page == "Incomes":
-    #     income_page()
-    
-    css = """
+# Apply custom CSS for theming
+st.markdown("""
     <style>
-        .stTabs [data-baseweb="tab-list"] button [data-testid="stMarkdownContainer"] p {
-        font-size:1.2rem;
-        }
+    .main {
+        background-color: #f5f5f5;
+        color: #333;
+        font-family: 'Arial', sans-serif;
+    }
+    .css-1d391kg {
+        background-color: #2e3b4e;
+        color: white;
+    }
+    .css-1d391kg a {
+        color: white;
+    }
+    .css-1d391kg a:hover {
+        color: #f39c12;
+    }
     </style>
-    """
-
-    st.markdown(css, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
