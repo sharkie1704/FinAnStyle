@@ -2,13 +2,17 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Initialize session state
+# Initialize session state variables
 if 'expenses' not in st.session_state:
     st.session_state.expenses = []
 if 'incomes' not in st.session_state:
     st.session_state.incomes = []
 if 'active_tab' not in st.session_state:
     st.session_state.active_tab = "Main Menu"
+if 'savings_goal' not in st.session_state:
+    st.session_state.savings_goal = 0
+if 'savings_progress' not in st.session_state:
+    st.session_state.savings_progress = 0
 
 # Set page configuration
 st.set_page_config(
@@ -19,15 +23,15 @@ st.set_page_config(
 )
 
 # Load your logo
-logo_url = "https://example.com/logo.png"  # Replace with the path to your logo
+# logo_url = "https://img.freepik.com/premium-vector/vector-illustration-finance-savings-concept-suitable-various-purposes_675567-5822.jpg?semt=ais_hybrid"  # Replace with the path to your logo
 
-# Define pages:
-tab1, tab2 = st.tabs(["🏠 Main Menu", "💰 Budgeting"])
+# Define pages
+tab1, tab2, tab3 = st.tabs(["🏠 Main Menu", "💰 Budgeting", "💸 Savings Goals"])
 
 # Main Menu Page
 def menu_page():
     st.title("Welcome to the Fine-An-Style App!")
-    st.image(logo_url, width=200)  # Display logo image
+    # st.image(logo_url, width=200)  # Display logo image
     
     st.write("""
         ### Take Control of Your Financial Future
@@ -46,8 +50,11 @@ def menu_page():
     user_age = st.text_input("Your age:")
     user_education_status = st.selectbox("Your education status:", ["High School", "College", "University", "Post-Graduate"])
     
-    if st.button("I'm ready to kickstart my budgeting journey!"):
-        st.session_state.active_tab = "Budgeting"
+    if st.button("I'm ready!"):
+        if user_name and user_age and user_education_status:
+            st.session_state.active_tab = "Budgeting"
+        else:
+            st.error("Please fill in all the fields before proceeding.")
 
 # Expenses Page
 def expenses_page():
@@ -67,6 +74,7 @@ def expenses_page():
                 'Amount': expense_amount,
                 'Category': expense_category
             })
+            st.session_state.savings_progress -= expense_amount
             st.success(f"Added {expense_name} for ${expense_amount} under {expense_category} category.")
         else:
             st.error("Please enter valid expense details.")
@@ -106,6 +114,7 @@ def income_page():
                 'Amount': income_amount,
                 'Category': income_category
             })
+            st.session_state.savings_progress += income_amount
             st.success(f"Added {income_name} for ${income_amount} under {income_category} category.")
         else:
             st.error("Please enter valid income details.")
@@ -127,11 +136,26 @@ def income_page():
     else:
         st.write("No incomes added yet.")
 
+# Savings Goals Page
+def savings_page():
+    st.title("Savings Goals")
+    st.write("Set and track your savings goals.")
+    savings_goal = st.number_input("Set your savings goal:", min_value=0.01, format="%.2f")
+    if st.button("Set Savings Goal"):
+        st.session_state.savings_goal = savings_goal
+        st.success(f"Savings goal set to ${savings_goal:.2f}")
+    st.write(f"### Current Savings Goal: ${st.session_state.savings_goal:.2f}")
+    st.write(f"### Savings Progress: ${st.session_state.savings_progress:.2f}")
+    if st.session_state.savings_goal > 0:
+        progress_percentage = (st.session_state.savings_progress / st.session_state.savings_goal) * 100
+
 # Conditionally render based on the active tab
 if st.session_state.active_tab == "Main Menu":
     with tab1:
         menu_page()
     with tab2:
+        st.write("Please go to the Main Menu tab first!")
+    with tab3:
         st.write("Please go to the Main Menu tab first!")
 else:
     with tab1:
@@ -139,59 +163,6 @@ else:
     with tab2:
         expenses_page()
         income_page()
+    with tab3:
+        savings_page()
 
-# Apply custom CSS for modern theming and background gradient
-st.markdown("""
-    <style>
-    .main {
-        background: linear-gradient(to right, #2ecc71, #8e44ad);  /* Green to purple gradient */
-        color: #FFFFFF;  /* White text for contrast */
-        font-family: 'Helvetica Neue', sans-serif;
-    }
-    .css-1d391kg {
-        background-color: #34495E;  /* Darker blue header */
-        color: white;
-    }
-    .css-1d391kg a {
-        color: white;
-    }
-    .css-1d391kg a:hover {
-        color: #F39C12;  /* Orange hover */
-    }
-    .stButton>button {
-        background-color: #F39C12;  /* Orange button */
-        color: white;
-        border-radius: 8px;
-        border: none;
-        font-size: 16px;
-        padding: 12px 25px;
-        font-weight: bold;
-    }
-    .stButton>button:hover {
-        background-color: #E67E22;  /* Darker orange on hover */
-    }
-    .stDataFrame>div>div>table {
-        font-family: 'Arial', sans-serif;
-        border-radius: 12px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    }
-    .stDataFrame>div>div>table th {
-        background-color: #2C3E50;  /* Darker header for tables */
-        color: white;
-    }
-    .stDataFrame>div>div>table td {
-        background-color: #ECF0F1;  /* Light gray for table rows */
-    }
-    .stDataFrame>div>div>table td:hover {
-        background-color: #BDC3C7;  /* Highlight rows on hover */
-    }
-    .stTextInput>div>div>input {
-        background-color: #34495E;  /* Dark input fields */
-        color: white;
-        border-radius: 6px;
-    }
-    .stTextInput>div>div>input:focus {
-        border: 2px solid #F39C12;  /* Focus effect */
-    }
-    </style>
-""", unsafe_allow_html=True)
