@@ -2,18 +2,17 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
-#LOGIN PAGE in progress 
-#EXPENSES UPDATE PAGE in progress
-#MENU PAGE in progress
-#PAGE FOR EACH MENU OPTION
-
-
-# Initialize session state
+# Initialize session state variables
 if 'expenses' not in st.session_state:
-        st.session_state.expenses = []
+    st.session_state.expenses = []
 if 'incomes' not in st.session_state:
     st.session_state.incomes = []
+if 'active_tab' not in st.session_state:
+    st.session_state.active_tab = "Main Menu"
+if 'savings_goal' not in st.session_state:
+    st.session_state.savings_goal = 0
+if 'savings_progress' not in st.session_state:
+    st.session_state.savings_progress = 0
 
 # Set page configuration
 st.set_page_config(
@@ -23,53 +22,51 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Apply custom CSS for theming
-st.markdown("""
-    <style>
-    .css-18e3th9 {
-        background-color: #f5f5f5;
-        color: #333;
-        font-family: 'Arial', sans-serif;
-    }
-    .css-1d391kg {
-        background-color: #2e3b4e;
-        color: white;
-    }
-    .css-1d391kg a {
-        color: white;
-    }
-    .css-1d391kg a:hover {
-        color: #f39c12;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+# Load your logo
+# logo_url = "https://img.freepik.com/premium-vector/vector-illustration-finance-savings-concept-suitable-various-purposes_675567-5822.jpg?semt=ais_hybrid"  # Replace with the path to your logo
 
-# Define pages:
+# Define pages
+tab1, tab2, tab3 = st.tabs(["🏠 Main Menu", "💰 Budgeting", "💸 Savings Goals"])
 
-# Login page
-def login_page():
-    st.title("Welcome to the Fine-An-Style App!")
-    st.write("This is your next step towards a healthier financial life (hopefully).")
-    #st.balloons()
-    st.title("Login Page")
-    st.write("This is the login page.")
-    
-# Menu page    
+# Main Menu Page
 def menu_page():
-    st.title("Welcome to the Fine-An-Style App!")
-    st.write("This is your next step towards a healthier financial life (hopefully).")
-    st.image("https://www.shutterstock.com/image-vector/bank-building-architecture-facade-government-600nw-2440534455.jpg", use_container_width=True)
+    st.title("Welcome to FineAnStyle!")
+    # st.image(logo_url, width=200)  # Display logo image
+    
+    st.write("""
+        ### Take Control of Your Financial Future
+        This app is designed to help you track your expenses, incomes, and savings goals in a simple, user-friendly way.
+        
+        **Why Choose FineAnStyle?**
+        - Easy-to-use budgeting tools.
+        - Track your expenses and incomes in real-time.
+        - Get insights with graphical data visualizations.
+        - Personalized budget tracking based on your inputs.
+        
+        **Ready to kickstart your budgeting journey?**
+    """)
+    
+    user_name = st.text_input("Your full name:")
+    user_age = st.text_input("Your age:")
+    user_education_status = st.selectbox("Your education status:", ["High School", "College", "University", "Post-Graduate"])
+    
+    if st.button("I'm ready!"):
+        if user_name and user_age and user_education_status:
+            st.session_state.active_tab = "Budgeting"
+        else:
+            st.error("Please fill in all the fields before proceeding.")
 
-
-# Expenses page
+# Expenses Page
 def expenses_page():
     st.title("Expense Tracker")
-    st.write("This is where you can track your expenses.")
-# Input fields for the user to enter expenses
-    expense_name = st.text_input("Expense Name", "")
+    st.write("""
+        Track your daily expenses and make better financial decisions.
+    """)
+    
+    expense_name = st.text_input("Expense Name")
     expense_amount = st.number_input("Expense Amount", min_value=0.01, format="%.2f")
-    expense_category = st.selectbox("Expense Category", ["Food", "Transport", "Entertainment", "Bills", "Other"])
-# Button to add the expense to the list
+    expense_category = st.selectbox("Expense Category", ["Food", "Transportation", "Entertainment", "Bills", "Other"])
+    
     if st.button("Add Expense"):
         if expense_name and expense_amount > 0:
             st.session_state.expenses.append({
@@ -77,41 +74,39 @@ def expenses_page():
                 'Amount': expense_amount,
                 'Category': expense_category
             })
+            st.session_state.savings_progress -= expense_amount
             st.success(f"Added {expense_name} for ${expense_amount} under {expense_category} category.")
         else:
             st.error("Please enter valid expense details.")
-# Display the table of expenses
+    
     if st.session_state.expenses:
         df = pd.DataFrame(st.session_state.expenses)
         st.write("### Your Expenses:")
-        st.dataframe(df)
-    
-    # Calculate and display the total
+        st.dataframe(df, use_container_width=True)
+        
         total_spent = df['Amount'].sum()
         st.write(f"### Total Spent: ${total_spent:.2f}")
 
-    # Visualize expenses by category with a pie chart
         category_totals = df.groupby('Category')['Amount'].sum()
         fig, ax = plt.subplots()
-        ax.pie(category_totals, labels=category_totals.index, autopct='%1.1f%%', startangle=90)
+        ax.pie(category_totals, labels=category_totals.index, autopct='%1.1f%%', startangle=90, colors=["#F1C40F", "#E74C3C", "#8E44AD", "#1ABC9C", "#2C3E50"])
         ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
         st.write("### Expenses by Category:")
         st.pyplot(fig)
     else:
         st.write("No expenses added yet.")
 
-    weekly_budget = st.text_input("Weekly Budget", "")
-    if total_spent > weekly_budget:
-        st.write("You have exceeded your weekly budget. We recommend the following:")
-
-# Income page
+# Income Page
 def income_page():
     st.title("Income Tracker")
-    st.write("This is where you can track your incomes.")
-    income_name = st.text_input("Income Name", "");
+    st.write("""
+        Keep track of your income sources and set financial goals.
+    """)
+    
+    income_name = st.text_input("Income Name")
     income_amount = st.number_input("Income Amount", min_value=0.01, format="%.2f")
     income_category = st.selectbox("Income Category", ["Salary", "Scholarship/Bursary", "Loans", "Bonus", "Gift", "Other"])
-    # Button to add an income to the list
+    
     if st.button("Add Income"):
         if income_name and income_amount > 0:
             st.session_state.incomes.append({
@@ -119,37 +114,54 @@ def income_page():
                 'Amount': income_amount,
                 'Category': income_category
             })
-            st.success(f"Added {expense_name} for ${expense_amount} under {expense_category} category.")
+            st.session_state.savings_progress += income_amount
+            st.success(f"Added {income_name} for ${income_amount} under {income_category} category.")
         else:
-            st.error("Please enter valid expense details.")      
-    # Display the table of incomes
+            st.error("Please enter valid income details.")
+    
     if st.session_state.incomes:
         df = pd.DataFrame(st.session_state.incomes)
         st.write("### Your Incomes:")
-        st.dataframe(df)
-        # Calculate and display the total
-        total_spent = df['Amount'].sum()
-        st.write(f"### Total Gained: ${total_spent:.2f}")
-        # Visualize incomes by category with a pie chart
+        st.dataframe(df, use_container_width=True)
+        
+        total_gained = df['Amount'].sum()
+        st.write(f"### Total Gained: ${total_gained:.2f}")
+        
         category_totals = df.groupby('Category')['Amount'].sum()
         fig, ax = plt.subplots()
-        ax.pie(category_totals, labels=category_totals.index, autopct='%1.1f%%', startangle=90)
+        ax.pie(category_totals, labels=category_totals.index, autopct='%1.1f%%', startangle=90, colors=["#F39C12", "#2980B9", "#16A085", "#8E44AD", "#2ECC71"])
         ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
         st.write("### Incomes by Category:")
         st.pyplot(fig)
     else:
-        st.write("No expenses added yet.")
+        st.write("No incomes added yet.")
 
-# Sidebar for navigation
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Menu", "Login", "Expenses", "Incomes"])
+# Savings Goals Page
+def savings_page():
+    st.title("Savings Goals")
+    st.write("Set and track your savings goals.")
+    savings_goal = st.number_input("Set your savings goal:", min_value=0.01, format="%.2f")
+    if st.button("Set Savings Goal"):
+        st.session_state.savings_goal = savings_goal
+        st.success(f"Savings goal set to ${savings_goal:.2f}")
+    st.write(f"### Current Savings Goal: ${st.session_state.savings_goal:.2f}")
+    st.write(f"### Savings Progress: ${st.session_state.savings_progress:.2f}")
+    if st.session_state.savings_goal > 0:
+        progress_percentage = (st.session_state.savings_progress / st.session_state.savings_goal) * 100
 
-# Display the selected page
-if page == "Login":
-    login_page()
-elif page == "Expenses":
-    expenses_page()
-elif page == "Incomes":
-    income_page()
-elif page == "Menu":
-    menu_page()
+# Conditionally render based on the active tab
+if st.session_state.active_tab == "Main Menu":
+    with tab1:
+        menu_page()
+    with tab2:
+        st.write("Please go to the Main Menu tab first!")
+    with tab3:
+        st.write("Please go to the Main Menu tab first!")
+else:
+    with tab1:
+        st.write("You can head over to the Budgeting tab!")
+    with tab2:
+        expenses_page()
+        income_page()
+    with tab3:
+        savings_page()
