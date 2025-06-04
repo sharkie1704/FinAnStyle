@@ -22,9 +22,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Load your logo
-# logo_url = "https://img.freepik.com/premium-vector/vector-illustration-finance-savings-concept-suitable-various-purposes_675567-5822.jpg?semt=ais_hybrid"  # Replace with the path to your logo
-
 # Define pages
 tab1, tab2, tab3 = st.tabs(["🏠 Main Menu", "💰 Budgeting", "💸 Savings Goals"])
 
